@@ -4,7 +4,7 @@
     "slug": "LegalBooks",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/LegalBooks.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -25,6 +25,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-web-browser",
+      "expo-asset"
+    ]
   }
 }
