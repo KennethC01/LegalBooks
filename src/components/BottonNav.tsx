@@ -21,28 +21,26 @@ export const BottomNav = () => {
           backgroundColor: COLORS.surface,
           borderTopColor: COLORS.border,
           borderTopWidth: 1,
-          // Convertimos la barra en flotante
-          position: 'absolute',
-          bottom: Platform.OS === 'android' ? 40 : 40, // Despega toda la barra del borde inferior
-          left: 16,
-          right: 16,
-          borderRadius: 20, // Bordes redondeados estéticos
-          height: 65,
-          paddingBottom: 8,
+
+         
+          height: Platform.OS === 'ios' ? 140 : 120,
+          paddingBottom: Platform.OS === 'ios' ? 25 : 12,
           paddingTop: 8,
-          // Sombra para Android y iOS
-          elevation: 5,
+
+          // Sombra superior
+          elevation: 10,
           shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.1,
-          shadowRadius: 8,
+          shadowOffset: { width: 0, height: -3 },
+          shadowOpacity: 0.08,
+          shadowRadius: 6,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: '500',
+          marginTop: 2,
         },
         tabBarIconStyle: {
-          marginTop: -7,
+          marginTop: 0,
         },
         tabBarIcon: ({ focused, color }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';

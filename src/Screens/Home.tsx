@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   grid: { 
     flexDirection: 'row', 
     flexWrap: 'wrap', 
-    justify: 'space-between' 
+    justifyContent: 'space-between' 
   },
   emptyContainer: {
     alignItems: 'center',
