@@ -1,44 +1,67 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
+
+import { Home } from '../Screens/Home';
+import { Docs } from '../Screens/Docs';
+import { Account } from '../Screens/Account';
 import { COLORS } from '../constants/theme';
 
-export const BottomNav: React.FC = () => (
-  <View style={styles.bottomNav}>
-    <TouchableOpacity style={styles.navItem}>
-      <Ionicons name="home" size={22} color={COLORS.primary} />
-      <Text style={[styles.navText, { color: COLORS.primary }]}>Inicio</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.navItem}>
-      <Ionicons name="search-outline" size={22} color={COLORS.textSecondary} />
-      <Text style={styles.navText}>Buscar</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.navItem}>
-      <Ionicons name="folder-open-outline" size={22} color={COLORS.textSecondary} />
-      <Text style={styles.navText}>Mis Docs</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.navItem}>
-      <Ionicons name="person-outline" size={22} color={COLORS.textSecondary} />
-      <Text style={styles.navText}>Cuenta</Text>
-    </TouchableOpacity>
-  </View>
-);
+const Tab = createBottomTabNavigator();
 
-const styles = StyleSheet.create({
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: COLORS.surface,
-    paddingTop: 10,
-    // Aumentamos a 35 o 40 para elevar los iconos significativamente
-    paddingBottom: Platform.OS === 'android' ? 60 : 40, 
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  navItem: { alignItems: 'center' },
-  navText: { fontSize: 10, color: COLORS.textSecondary, marginTop: 2 },
-});
+export const BottomNav = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.textSecondary,
+        tabBarStyle: {
+          backgroundColor: COLORS.surface,
+          borderTopColor: COLORS.border,
+          borderTopWidth: 1,
+          // Convertimos la barra en flotante
+          position: 'absolute',
+          bottom: Platform.OS === 'android' ? 40 : 40, // Despega toda la barra del borde inferior
+          left: 16,
+          right: 16,
+          borderRadius: 20, // Bordes redondeados estéticos
+          height: 65,
+          paddingBottom: 8,
+          paddingTop: 8,
+          // Sombra para Android y iOS
+          elevation: 5,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 10,
+          fontWeight: '500',
+        },
+        tabBarIconStyle: {
+          marginTop: -7,
+        },
+        tabBarIcon: ({ focused, color }) => {
+          let iconName: keyof typeof Ionicons.glyphMap = 'home';
+
+          if (route.name === 'Inicio') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Mis Docs') {
+            iconName = focused ? 'folder-open' : 'folder-open-outline';
+          } else if (route.name === 'Cuenta') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
+
+          return <Ionicons name={iconName} size={22} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen name="Inicio" component={Home} />
+      <Tab.Screen name="Mis Docs" component={Docs} />
+      <Tab.Screen name="Cuenta" component={Account} />
+    </Tab.Navigator>
+  );
+};
