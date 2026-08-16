@@ -32,13 +32,21 @@ export const Home = () => {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <SearchBar query={searchQuery} onChangeQuery={setSearchQuery} />
 
-        <Text style={styles.sectionTitle}>DOCUMENTOS DESTACADOS</Text>
+        <Text style={styles.sectionTitle}>
+          DOCUMENTOS DESTACADOS ({filteredDocuments.length})
+        </Text>
         
-        <View style={styles.grid}>
-          {filteredDocuments.map(doc => (
-            <DocumentCard key={doc.id} item={doc} onSelect={handleSelectDocument} />
-          ))}
-        </View>
+        {filteredDocuments.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No se encontraron documentos.</Text>
+          </View>
+        ) : (
+          <View style={styles.grid}>
+            {filteredDocuments.map(doc => (
+              <DocumentCard key={doc.id} item={doc} onSelect={handleSelectDocument} />
+            ))}
+          </View>
+        )}
       </ScrollView>
 
       {/* Modal para visualizar y descargar */}
@@ -68,5 +76,19 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     letterSpacing: 0.5,
   },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
+  grid: { 
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justify: 'space-between' 
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  emptyText: {
+    color: COLORS.textSecondary,
+    fontSize: 14,
+  },
 });
+
+export default Home;

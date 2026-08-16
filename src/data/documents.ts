@@ -33,8 +33,51 @@ export const DOCUMENTS: DocumentItem[] = [
   {
     id: '5',
     title: 'Ley de Tránsito',
-    subtitle: 'Formato editable Mutuo Acuerdo',
+    subtitle: 'Regulaciones de circulación vial',
     type: 'DOCX',
     pdfFile: require('../../assets/pdfs/Ley-de-Transito.pdf'),
+  },
+
+ 
+
+
+
+  {
+    id: '6',
+    title: 'Código del Trabajo',
+    subtitle: 'Derechos y obligaciones laborales',
+    type: 'PDF',
+    tag: 'NUEVO',
+    pdfFile: require('../../assets/pdfs/codigo_de_trabajo.pdf'),
+  },
+  {
+    id: '7',
+    title: 'Ley Organizacion Tribunales',
+    subtitle: 'Texto oficial',
+    type: 'PDF',
+    tag: 'Nuevo',
+    pdfFile: require('../../assets/pdfs/leyorganizaciontribunales.pdf'),
+  },
+  {
+    id: '8',
+    title: 'Código Penal de Honduras',
+    subtitle: 'Decreto No. 130-2017',
+    type: 'PDF',
+    pdfFile: require('../../assets/pdfs/115_CodigoPenalNo.130-2017.pdf'),
+  },
+  {
+    id: '9',
+    title: 'Código de Comercio',
+    subtitle: 'Normativa de actos mercantiles',
+    type: 'PDF',
+    pdfFile: require('../../assets/pdfs/codigo_comercio.pdf'),
+  },
+ 
+  {
+    id: '10',
+    title: 'Codigo Procesal Civil de Honduras',
+    subtitle: 'Regulaciones de circulación vial',
+    type: 'DOCX',
+    pdfFile: require('../../assets/pdfs/Codigo_Procesal_Civil.pdf'),
   },
 ];
