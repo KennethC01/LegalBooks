@@ -8,7 +8,7 @@ import { FavoritesProvider } from './src/context/FavoritesContext';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { Login } from './src/Screens/Login';
 import { COLORS } from './src/constants/theme';
-
+import { NotificationProvider } from './src/context/NotificationContext';
 const RootNavigator = () => {
   const { isAuthenticated, isLoading } = useAuth();
 
@@ -28,9 +28,11 @@ export default function App() {
     <SafeAreaProvider>
       <AuthProvider>
         <FavoritesProvider>
+          <NotificationProvider>
           <NavigationContainer>
             <RootNavigator />
-          </NavigationContainer>
+           </NavigationContainer>
+          </NotificationProvider>
         </FavoritesProvider>
       </AuthProvider>
     </SafeAreaProvider>

@@ -1,26 +1,19 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from './AuthContext';
+import { DocumentItem } from '../constants/types';
 
-export interface Book {
-  id: string;
-  title: string;
-  subtitle?: string;
-  type?: string;
-  category?: string;
-  [key: string]: any;
-}
 
 interface FavoritesContextType {
-  favorites: Book[];
-  toggleFavorite: (book: Book) => Promise<void>;
+  favorites: DocumentItem[];
+  toggleFavorite: (book: DocumentItem) => Promise<void>;
   isFavorite: (id: string) => boolean;
 }
 
 const FavoritesContext = createContext<FavoritesContextType>({} as FavoritesContextType);
 
 export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [favorites, setFavorites] = useState<Book[]>([]);
+  const [favorites, setFavorites] = useState<DocumentItem[]>([]);
   const { user } = useAuth(); // Obtenemos la información del usuario autenticado
 
   // Clave dinámica en AsyncStorage asociada al correo de la cuenta activa
@@ -51,12 +44,10 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, [user?.email, storageKey]);
 
   // Guarda o elimina el favorito dentro de la clave del usuario actual
-  const toggleFavorite = async (book: Book) => {
-    if (!user?.email) return;
+const toggleFavorite = async (book: DocumentItem) => {    if (!user?.email) return;
 
     try {
-      let updatedFavorites: Book[];
-      const exists = favorites.some((fav) => fav.id === book.id);
+let updatedFavorites: DocumentItem[];      const exists = favorites.some((fav) => fav.id === book.id);
 
       if (exists) {
         updatedFavorites = favorites.filter((fav) => fav.id !== book.id);

@@ -8,8 +8,10 @@ import { PdfViewerModal } from '../components/PdfViewerModal';
 import { DOCUMENTS } from '../data/documents';
 import { COLORS } from '../constants/theme';
 import { DocumentItem } from '../constants/types';
+import { useNavigation } from '@react-navigation/native';
 
 export const Home = () => {
+  const navigation = useNavigation<any>();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDoc, setSelectedDoc] = useState<DocumentItem | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,7 +29,9 @@ export const Home = () => {
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.headerBg} translucent={false} />
-      <Header />
+      <Header 
+       onNotificationPress={() => navigation.navigate('Notifications')}
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <SearchBar query={searchQuery} onChangeQuery={setSearchQuery} />
