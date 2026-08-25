@@ -7,8 +7,9 @@ import { PdfViewerModal } from '../components/PdfViewerModal';
 import { useFavorites } from '../context/FavoritesContext';
 import { DocumentItem } from '../constants/types';
 import { COLORS } from '../constants/theme';
-
+import { useNavigation } from '@react-navigation/native';
 export const Docs = () => {
+  const navigation = useNavigation<any>();
   const { favorites } = useFavorites();
   const [selectedDoc, setSelectedDoc] = useState<DocumentItem | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,7 +22,9 @@ export const Docs = () => {
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       {/* Cabecera con logo */}
-      <Header />
+      <Header 
+       onNotificationPress={() => navigation.navigate('Notifications')}
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.sectionTitle}>MIS DOCUMENTOS FAVORITOS</Text>
