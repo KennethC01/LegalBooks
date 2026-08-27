@@ -12,9 +12,8 @@ export const Account = () => {
   useEffect(() => {
   const loadAccountData = async () => {
     try {
-      const savedName = await AsyncStorage.getItem('userName');
-      const savedPhone = await AsyncStorage.getItem('userPhone');
-
+      const savedName = await AsyncStorage.getItem(`userName_${user?.email}`);
+      const savedPhone = await AsyncStorage.getItem(`userPhone_${user?.email}`);
       if (savedName) {
         setName(savedName);
       }
@@ -48,8 +47,8 @@ export const Account = () => {
     return;
   }
  try {
-  await AsyncStorage.setItem('userName', name.trim());
-  await AsyncStorage.setItem('userPhone', phone.trim());
+  await AsyncStorage.setItem(`userName_${user?.email}`,name.trim());
+  await AsyncStorage.setItem(`userPhone_${user?.email}`,phone.trim());
 } catch (error) {
   Alert.alert(
     'Error',
