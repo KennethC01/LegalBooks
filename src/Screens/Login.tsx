@@ -22,7 +22,7 @@ export const Login = () => {
       Alert.alert('Campos requeridos', 'Por favor ingresa tu correo y contraseña.');
       return;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailRegex.test(email.trim())) {
     Alert.alert(
@@ -38,11 +38,9 @@ export const Login = () => {
     );
     return;
   }
-    await login(email);
+    await login(email.trim());
   };
-console.log(
-    Image.resolveAssetSource(require('../../assets/LegalBooks.png'))
-  );
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
@@ -66,17 +64,18 @@ console.log(
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <Text style={styles.label}>Contraseña</Text>
           <TextInput
             style={styles.input}
-            placeholder="*******"
+            placeholder="••••••••"
             placeholderTextColor={GOLD_COLORS.subtext}
             value={password}
             onChangeText={setPassword}
-            secureTextEntry
-            keyboardType="email-address"
+            secureTextEntry={true}
+           
             autoCapitalize="none"
             autoCorrect={false}
           />
