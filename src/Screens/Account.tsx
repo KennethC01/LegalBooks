@@ -1,11 +1,67 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert,} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 import { COLORS } from '../constants/theme';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export const Account = () => {
   const { user, logout } = useAuth();
+  const [name, setName] = useState(user?.name || '');
+  const [phone, setPhone] = useState('');
+
+  useEffect(() => {
+  const loadAccountData = async () => {
+    try {
+      const savedName = await AsyncStorage.getItem(`userName_${user?.email}`);
+      const savedPhone = await AsyncStorage.getItem(`userPhone_${user?.email}`);
+      if (savedName) {
+        setName(savedName);
+      }
+
+      if (savedPhone) {
+        setPhone(savedPhone);
+      }
+    } catch (error) {
+      console.log('Error al cargar los datos de la cuenta:', error);
+    }
+  };
+
+  loadAccountData();
+}, []);  
+  const handleSave = async () => {
+  if (!name.trim() || !phone.trim()) {
+    Alert.alert(
+      'Campos requeridos',
+      'Por favor ingresa tu nombre y numero de telefono.'
+    );
+    return;
+  }
+
+  const phoneRegex = /^[0-9]{8}$/;
+
+  if (!phoneRegex.test(phone.trim())) {
+    Alert.alert(
+      'Telefono invlido',
+      'El numero de telefono debe contener 8 digitos.'
+    );
+    return;
+  }
+ try {
+  await AsyncStorage.setItem(`userName_${user?.email}`,name.trim());
+  await AsyncStorage.setItem(`userPhone_${user?.email}`,phone.trim());
+} catch (error) {
+  Alert.alert(
+    'Error',
+    'No se pudieron guardar los datos.'
+  );
+  return;
+}
+
+  Alert.alert(
+    'Datos guardados',
+    'La informacion de tu cuenta fue actualizada correctamente.'
+  );
+};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -14,10 +70,33 @@ export const Account = () => {
         
         <View style={styles.card}>
           <Text style={styles.label}>Nombre</Text>
-          <Text style={styles.value}>{user?.name || 'Usuario'}</Text>
+          <TextInput
+  style={styles.input}
+  placeholder="Ingresa tu nombre"
+  placeholderTextColor={COLORS.textSecondary}
+  value={name}
+  onChangeText={setName}
+  autoCorrect={false}
+/>
 
           <Text style={styles.label}>Correo Electrónico</Text>
-          <Text style={styles.value}>{user?.email || 'Sin correo'}</Text>
+          <TextInput
+  style={styles.input}
+  placeholder="Ej. 98765432"
+  placeholderTextColor={COLORS.textSecondary}
+  value={phone}
+  onChangeText={setPhone}
+  keyboardType="phone-pad"
+  maxLength={8}
+/>
+<TouchableOpacity
+  style={styles.saveButton}
+  onPress={handleSave}
+>
+  <Text style={styles.saveButtonText}>
+    GUARDAR DATOS
+  </Text>
+</TouchableOpacity>
         </View>
 
         {/* Botón para borrar AsyncStorage y regresar al Login */}
@@ -75,6 +154,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
+  input: {
+  height: 48,
+  borderWidth: 1,
+  borderColor: COLORS.border,
+  borderRadius: 8,
+  paddingHorizontal: 12,
+  marginBottom: 16,
+  color: COLORS.textPrimary,
+  backgroundColor: COLORS.background,
+},
+
+saveButton: {
+  backgroundColor: '#D4AF37',
+  height: 48,
+  borderRadius: 8,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 8,
+},
+
+saveButtonText: {
+  color: '#121212',
+  fontWeight: 'bold',
+  fontSize: 14,
+},
 });
 
 export default Account;

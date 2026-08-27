@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Alert } from 'react-native';
+import { StyleSheet, Text, Image, View, TextInput, TouchableOpacity, StatusBar, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 import { COLORS } from '../constants/theme';
@@ -22,14 +22,35 @@ export const Login = () => {
       Alert.alert('Campos requeridos', 'Por favor ingresa tu correo y contraseña.');
       return;
     }
-    await login(email);
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email.trim())) {
+    Alert.alert(
+      'Correo inválido',
+      'Por favor ingresa un correo electrónico válido.'
+    );
+    return;
+  }
+  if (password.length < 6) {
+    Alert.alert(
+      'Contraseña inválida',
+      'La contraseña debe tener al menos 6 caracteres.'
+    );
+    return;
+  }
+    await login(email.trim());
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      
+  
       <View style={styles.content}>
+            <Image
+             source={require('../../assets/LegalBooks.png')}
+              style={styles.logo}
+               resizeMode="contain"
+/>
         <Text style={styles.brandTitle}>LEGAL BOOKS</Text>
         <Text style={styles.subtitle}>Ingresa a tu cuenta para continuar</Text>
 
@@ -43,6 +64,7 @@ export const Login = () => {
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <Text style={styles.label}>Contraseña</Text>
@@ -52,7 +74,10 @@ export const Login = () => {
             placeholderTextColor={GOLD_COLORS.subtext}
             value={password}
             onChangeText={setPassword}
-            secureTextEntry
+            secureTextEntry={true}
+           
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
@@ -125,6 +150,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     letterSpacing: 0.5,
   },
+  logo: {
+width: 120,
+  height: 120,
+  alignSelf: 'center',
+  marginBottom: 16,
+},
 });
 
 export default Login;
