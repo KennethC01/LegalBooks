@@ -22,6 +22,22 @@ export const Login = () => {
       Alert.alert('Campos requeridos', 'Por favor ingresa tu correo y contraseña.');
       return;
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email.trim())) {
+    Alert.alert(
+      'Correo inválido',
+      'Por favor ingresa un correo electrónico válido.'
+    );
+    return;
+  }
+  if (password.length < 6) {
+    Alert.alert(
+      'Contraseña inválida',
+      'La contraseña debe tener al menos 6 caracteres.'
+    );
+    return;
+  }
     await login(email);
   };
 console.log(
@@ -55,11 +71,14 @@ console.log(
           <Text style={styles.label}>Contraseña</Text>
           <TextInput
             style={styles.input}
-            placeholder="••••••••"
+            placeholder="*******"
             placeholderTextColor={GOLD_COLORS.subtext}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
