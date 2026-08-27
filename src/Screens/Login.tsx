@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Alert } from 'react-native';
+import { StyleSheet, Text, Image, View, TextInput, TouchableOpacity, StatusBar, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 import { COLORS } from '../constants/theme';
@@ -24,12 +24,19 @@ export const Login = () => {
     }
     await login(email);
   };
-
+console.log(
+    Image.resolveAssetSource(require('../../assets/LegalBooks.png'))
+  );
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      
+  
       <View style={styles.content}>
+            <Image
+             source={require('../../assets/LegalBooks.png')}
+              style={styles.logo}
+               resizeMode="contain"
+/>
         <Text style={styles.brandTitle}>LEGAL BOOKS</Text>
         <Text style={styles.subtitle}>Ingresa a tu cuenta para continuar</Text>
 
@@ -125,6 +132,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     letterSpacing: 0.5,
   },
+  logo: {
+width: 120,
+  height: 120,
+  alignSelf: 'center',
+  marginBottom: 16,
+},
 });
 
 export default Login;
