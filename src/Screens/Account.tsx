@@ -79,7 +79,7 @@ export const Account = () => {
   autoCorrect={false}
 />
 
-          <Text style={styles.label}>Correo Electrónico</Text>
+          <Text style={styles.label}>Numero de telefono</Text>
           <TextInput
   style={styles.input}
   placeholder="Ej. 98765432"
