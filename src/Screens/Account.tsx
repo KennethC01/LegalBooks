@@ -4,11 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 import { COLORS } from '../constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppSelector } from '../store/hooks';
 export const Account = () => {
   const { user, logout } = useAuth();
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState('');
-
+  const reduxUser = useAppSelector((state) => state.user);
+  console.log('Usuario leído desde Redux:', reduxUser);
   useEffect(() => {
   const loadAccountData = async () => {
     try {
@@ -78,8 +80,11 @@ export const Account = () => {
   onChangeText={setName}
   autoCorrect={false}
 />
-
-          <Text style={styles.label}>Correo Electrónico</Text>
+<Text style={styles.label}>Correo electrónico</Text>
+<Text style={styles.value}>
+  {reduxUser.email || user?.email || 'No disponible'}
+</Text>
+          <Text style={styles.label}>Numero de telefono</Text>
           <TextInput
   style={styles.input}
   placeholder="Ej. 98765432"

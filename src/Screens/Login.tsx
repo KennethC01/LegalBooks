@@ -3,7 +3,8 @@ import { StyleSheet, Text, Image, View, TextInput, TouchableOpacity, StatusBar, 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 import { COLORS } from '../constants/theme';
-
+import { useAppDispatch } from '../store/hooks';
+import { setUser } from '../store/slices/userslice';
 const GOLD_COLORS = {
   primary: '#D4AF37',
   dark: '#B8860B',
@@ -16,7 +17,8 @@ export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
-
+  const dispatch = useAppDispatch();
+  
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
       Alert.alert('Campos requeridos', 'Por favor ingresa tu correo y contraseña.');
@@ -38,7 +40,33 @@ export const Login = () => {
     );
     return;
   }
-    await login(email.trim());
+   const cleanEmail = email.trim();
+
+await login(cleanEmail);
+
+const userName = cleanEmail
+  .split('@')[0]
+  .replace(/[0-9]/g, '')
+  .split(/[._-]/)
+  .filter(Boolean)
+  .map(
+    part =>
+      part.charAt(0).toUpperCase() +
+      part.slice(1).toLowerCase()
+  )
+  .join(' ');
+
+dispatch(
+  setUser({
+    name: userName,
+    email: cleanEmail,
+  })
+);
+
+console.log('Usuario almacenado en Redux:', {
+  name: userName,
+  email: cleanEmail,
+});
   };
 
   return (
