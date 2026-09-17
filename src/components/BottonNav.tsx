@@ -3,18 +3,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
-
+import Settings from '../Screens/Settings';
 import { Home } from '../Screens/Home';
 import { Docs } from '../Screens/Docs';
 import { Account } from '../Screens/Account';
 import { Notifications } from '../Screens/Notifications';
-
+import { useLanguage } from '../context/LanguageContext';
 import { COLORS } from '../constants/theme';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const MainTabs = () => {
+  const { language } = useLanguage();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -74,9 +75,29 @@ const MainTabs = () => {
         },
       })}
     >
-      <Tab.Screen name="Inicio" component={Home} />
-      <Tab.Screen name="Mis Docs" component={Docs} />
-      <Tab.Screen name="Cuenta" component={Account} />
+      <Tab.Screen
+  name="Inicio"
+  component={Home}
+  options={{
+    tabBarLabel: language === 'es' ? 'Inicio' : 'Home',
+  }}
+/>
+
+<Tab.Screen
+  name="Mis Docs"
+  component={Docs}
+  options={{
+    tabBarLabel: language === 'es' ? 'Mis Docs' : 'My Docs',
+  }}
+/>
+
+<Tab.Screen
+  name="Cuenta"
+  component={Account}
+  options={{
+    tabBarLabel: language === 'es' ? 'Cuenta' : 'Account',
+  }}
+/>
     </Tab.Navigator>
   );
 };
@@ -96,6 +117,11 @@ export const BottomNav = () => {
       <Stack.Screen
         name="Notifications"
         component={Notifications}
+      />
+
+      <Stack.Screen
+       name="Settings"
+       component={Settings}
       />
     </Stack.Navigator>
   );

@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert,} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppSelector } from '../store/hooks';
+import { useLanguage } from '../context/LanguageContext';
 export const Account = () => {
+  const navigation = useNavigation<any>();
   const { user, logout } = useAuth();
+  const { language } = useLanguage();
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState('');
   const reduxUser = useAppSelector((state) => state.user);
@@ -32,10 +37,12 @@ export const Account = () => {
 }, []);  
   const handleSave = async () => {
   if (!name.trim() || !phone.trim()) {
-    Alert.alert(
-      'Campos requeridos',
-      'Por favor ingresa tu nombre y numero de telefono.'
-    );
+   Alert.alert(
+  language === 'es' ? 'Campos requeridos' : 'Required fields',
+  language === 'es'
+    ? 'Por favor ingresa tu nombre y número de teléfono.'
+    : 'Please enter your name and phone number.'
+);
     return;
   }
 
@@ -43,8 +50,10 @@ export const Account = () => {
 
   if (!phoneRegex.test(phone.trim())) {
     Alert.alert(
-      'Telefono invlido',
-      'El numero de telefono debe contener 8 digitos.'
+      language === 'es' ? 'Teléfono inválido' : 'Invalid phone number',
+      language === 'es'
+        ? 'El número de teléfono debe contener 8 dígitos.'
+        : 'The phone number must contain 8 digits.'
     );
     return;
   }
@@ -53,38 +62,50 @@ export const Account = () => {
   await AsyncStorage.setItem(`userPhone_${user?.email}`,phone.trim());
 } catch (error) {
   Alert.alert(
-    'Error',
-    'No se pudieron guardar los datos.'
+    language === 'es' ? 'Error' : 'Error',
+    language === 'es'
+      ? 'No se pudieron guardar los datos.'
+      : 'Failed to save data.'
   );
   return;
 }
 
   Alert.alert(
-    'Datos guardados',
-    'La informacion de tu cuenta fue actualizada correctamente.'
+    language === 'es' ? 'Datos guardados' : 'Data saved',
+    language === 'es'
+      ? 'La informacion de tu cuenta fue actualizada correctamente.'
+      : 'Your account information has been updated successfully.'
   );
 };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Mi Cuenta</Text>
+        <Text style={styles.title}>
+         {language === 'es' ? 'Mi Cuenta' : 'My Account'}
+           </Text>
         
         <View style={styles.card}>
-          <Text style={styles.label}>Nombre</Text>
+          <Text style={styles.label}>
+           {language === 'es' ? 'Nombre' : 'Name'}
+            </Text>
           <TextInput
   style={styles.input}
-  placeholder="Ingresa tu nombre"
+  placeholder={
+  language === 'es'? 'Ingresa tu nombre': 'Enter your name'}
   placeholderTextColor={COLORS.textSecondary}
   value={name}
   onChangeText={setName}
   autoCorrect={false}
 />
-<Text style={styles.label}>Correo electrónico</Text>
+<Text style={styles.label}>
+  {language === 'es' ? 'Correo electrónico' : 'Email'}
+</Text>
 <Text style={styles.value}>
   {reduxUser.email || user?.email || 'No disponible'}
 </Text>
-          <Text style={styles.label}>Numero de telefono</Text>
+          <Text style={styles.label}>{language === 'es' ? 'Número de teléfono' : 'Phone number'}
+</Text>
           <TextInput
   style={styles.input}
   placeholder="Ej. 98765432"
@@ -99,14 +120,28 @@ export const Account = () => {
   onPress={handleSave}
 >
   <Text style={styles.saveButtonText}>
-    GUARDAR DATOS
+    {language === 'es' ? 'GUARDAR DATOS' : 'SAVE DATA'}
   </Text>
 </TouchableOpacity>
         </View>
+       <TouchableOpacity
+  style={styles.settingsButton}
+  onPress={() => navigation.navigate('Settings')}
+>
+  <Ionicons
+    name="settings-outline"
+    size={20}
+    color="#170072"
+  />
 
+  <Text style={styles.settingsButtonText}>
+    {language === 'es' ? 'CONFIGURACIÓN' : 'SETTINGS'}
+  </Text>
+</TouchableOpacity>
         {/* Botón para borrar AsyncStorage y regresar al Login */}
         <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-          <Text style={styles.logoutButtonText}>CERRAR SESIÓN</Text>
+           <Text style={styles.logoutButtonText}>{language === 'es' ? 'CERRAR SESIÓN' : 'LOG OUT'}
+</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -181,6 +216,24 @@ saveButton: {
 
 saveButtonText: {
   color: '#121212',
+  fontWeight: 'bold',
+  fontSize: 14,
+},
+settingsButton: {
+  backgroundColor: COLORS.surface,
+  height: 48,
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: COLORS.border,
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'row',
+  gap: 8,
+  marginBottom: 12,
+},
+
+settingsButtonText: {
+  color: '#170072',
   fontWeight: 'bold',
   fontSize: 14,
 },

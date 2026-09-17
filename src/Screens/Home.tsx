@@ -9,9 +9,10 @@ import { DOCUMENTS } from '../data/documents';
 import { COLORS } from '../constants/theme';
 import { DocumentItem } from '../constants/types';
 import { useNavigation } from '@react-navigation/native';
-
+import { useLanguage } from '../context/LanguageContext';
 export const Home = () => {
   const navigation = useNavigation<any>();
+  const { language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDoc, setSelectedDoc] = useState<DocumentItem | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,13 +38,17 @@ export const Home = () => {
         <SearchBar query={searchQuery} onChangeQuery={setSearchQuery} />
 
         <Text style={styles.sectionTitle}>
-          DOCUMENTOS DESTACADOS ({filteredDocuments.length})
-        </Text>
+       {language === 'es'
+        ? `DOCUMENTOS DESTACADOS (${filteredDocuments.length})`
+       : `FEATURED DOCUMENTS (${filteredDocuments.length})`}
+       </Text>
         
         {filteredDocuments.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No se encontraron documentos.</Text>
-          </View>
+          <Text style={styles.emptyText}>
+          {language === 'es'
+           ? 'No se encontraron documentos.'
+            : 'No documents found.'}
+            </Text>
         ) : (
           <View style={styles.grid}>
             {filteredDocuments.map(doc => (

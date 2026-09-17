@@ -18,7 +18,7 @@ import * as Sharing from 'expo-sharing';
 import { WebView } from 'react-native-webview';
 import { DocumentItem } from '../constants/types';
 import { COLORS } from '../constants/theme';
-
+import { useLanguage } from '../context/LanguageContext';
 interface Props {
   visible: boolean;
   document: DocumentItem | null;
@@ -26,6 +26,7 @@ interface Props {
 }
 
 export const PdfViewerModal: React.FC<Props> = ({ visible, document, onClose }) => {
+  const { language } = useLanguage();
   const [base64Pdf, setBase64Pdf] = useState<string | null>(null);
   const [localUri, setLocalUri] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,7 +53,7 @@ export const PdfViewerModal: React.FC<Props> = ({ visible, document, onClose }) 
         }
       } catch (error) {
         console.error('Error al procesar PDF:', error);
-        Alert.alert('Error', 'No se pudo cargar el archivo PDF.');
+        Alert.alert('Error',language === 'es'? 'No se pudo cargar el archivo PDF.': 'The PDF file could not be loaded.');
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -74,7 +75,7 @@ export const PdfViewerModal: React.FC<Props> = ({ visible, document, onClose }) 
 
   const handleDownload = async () => {
     if (!localUri || !base64Pdf) {
-      Alert.alert('Aviso', 'El archivo no está listo.');
+      Alert.alert(language === 'es' ? 'Aviso' : 'Notice',language === 'es'? 'El archivo no está listo.': 'The file is not ready.');
       return;
     }
 
@@ -96,14 +97,13 @@ export const PdfViewerModal: React.FC<Props> = ({ visible, document, onClose }) 
             encoding: FileSystem.EncodingType.Base64,
           });
 
-          Alert.alert('¡Éxito!', `El documento se guardó correctamente como "${fileName}".`);
-        }
+           Alert.alert(language === 'es' ? '¡Éxito!' : 'Success!',language === 'es'? `El documento se guardó correctamente como "${fileName}".`: `The document was successfully saved as "${fileName}".`);        }
       } else {
         const isAvailable = await Sharing.isAvailableAsync();
         if (isAvailable) {
           await Sharing.shareAsync(localUri, {
             mimeType: 'application/pdf',
-            dialogTitle: `Guardar ${document.title}`,
+            dialogTitle:language === 'es'? `Guardar ${document.title}`: `Save ${document.title}`,
             UTI: 'com.adobe.pdf',
           });
         }

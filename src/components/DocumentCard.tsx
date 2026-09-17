@@ -3,8 +3,10 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DocumentItem } from '../constants/types';
 import { COLORS } from '../constants/theme';
-import { useFavorites } from '../context/FavoritesContext';
-
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { toggleFavorite } from '../store/slices/favoritesSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../context/AuthContext';
 interface Props {
   item: DocumentItem;
   onSelect: (item: DocumentItem) => void;
@@ -12,9 +14,37 @@ interface Props {
 
 export const DocumentCard: React.FC<Props> = ({ item, onSelect }) => {
   // Conexión con el contexto de favoritos
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const favorite = isFavorite(item.id);
+  const dispatch = useAppDispatch();
+  const { user } = useAuth();
+  const favorites = useAppSelector(state => state.favorites.documents);
+  const favorite = favorites.some(document => document.id === item.id);
+  const handleToggleFavorite = async () => {
+  if (!user?.email) return;
 
+  const exists = favorites.some(
+    document => document.id === item.id
+  );
+
+  const updatedFavorites = exists
+    ? favorites.filter(document => document.id !== item.id)
+    : [...favorites, item];
+
+  dispatch(toggleFavorite(item));
+
+  try {
+    const storageKey = `@legalbooks_favorites_${user.email}`;
+
+    await AsyncStorage.setItem(
+      storageKey,
+      JSON.stringify(updatedFavorites)
+    );
+  } catch (error) {
+    console.error(
+      'Error al guardar favoritos en Redux:',
+      error
+    );
+  }
+};
   return (
     <TouchableOpacity style={styles.card} onPress={() => onSelect(item)} activeOpacity={0.7}>
       <View style={styles.cardHeader}>
@@ -30,7 +60,7 @@ export const DocumentCard: React.FC<Props> = ({ item, onSelect }) => {
 
         {/* Botón de Estrella a la derecha */}
         <TouchableOpacity
-          onPress={() => toggleFavorite(item)}
+          onPress={handleToggleFavorite}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons
