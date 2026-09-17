@@ -6,7 +6,6 @@ import { Provider } from 'react-redux'; // <-- 1. Importar Redux Provider
 import { LanguageProvider } from './src/context/LanguageContext';
 import { store } from './src/store'; // <-- 2. Importar el store creado
 import { BottomNav } from './src/components/BottonNav';
-import { FavoritesProvider } from './src/context/FavoritesContext';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { Login } from './src/Screens/Login';
 import { COLORS } from './src/constants/theme';
@@ -32,13 +31,11 @@ export default function App() {
       <LanguageProvider>
       <SafeAreaProvider>
         <AuthProvider>
-          <FavoritesProvider>
             <NotificationProvider>
               <NavigationContainer>
                 <RootNavigator />
               </NavigationContainer>
             </NotificationProvider>
-          </FavoritesProvider>
         </AuthProvider>
       </SafeAreaProvider>
        </LanguageProvider>

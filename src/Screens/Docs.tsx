@@ -1,28 +1,62 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../components/header';
 import { DocumentCard } from '../components/DocumentCard';
 import { PdfViewerModal } from '../components/PdfViewerModal';
-import { useFavorites } from '../context/FavoritesContext';
 import { DocumentItem } from '../constants/types';
 import { COLORS } from '../constants/theme';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { addDocument, removeDocument } from '../store/slices/inventorySlice';
 import { useLanguage } from '../context/LanguageContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../context/AuthContext';
+import { setFavorites } from '../store/slices/favoritesSlice';
 export const Docs = () => {
   const navigation = useNavigation<any>();
   const { language } = useLanguage();
   const dispatch = useAppDispatch();
+  const { user } = useAuth();
   const reduxDocuments = useAppSelector(
     (state) => state.inventory.documents);
   console.log(
     'Documentos almacenados en Redux:',
     reduxDocuments
   );
-  const { favorites } = useFavorites();
-  const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
+const favorites = useAppSelector(state => state.favorites.documents); 
+   useEffect(() => {
+  const loadFavorites = async () => {
+    if (!user?.email) {
+      dispatch(setFavorites([]));
+      return;
+    }
+
+    try {
+      const storageKey = `@legalbooks_favorites_${user.email}`;
+
+      const savedFavorites = await AsyncStorage.getItem(
+        storageKey
+      );
+
+      if (savedFavorites) {
+        dispatch(
+          setFavorites(JSON.parse(savedFavorites))
+        );
+      } else {
+        dispatch(setFavorites([]));
+      }
+    } catch (error) {
+      console.error(
+        'Error al cargar favoritos en Redux:',
+        error
+      );
+    }
+  };
+
+  loadFavorites();
+}, [user?.email, dispatch]);
+const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
   const [modalVisible, setModalVisible] =useState(false);
   const handleSelectDocument = (doc: DocumentItem) => {setSelectedDoc(doc);setModalVisible(true);
   };
