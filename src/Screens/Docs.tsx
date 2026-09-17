@@ -10,8 +10,10 @@ import { COLORS } from '../constants/theme';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { addDocument, removeDocument } from '../store/slices/inventorySlice';
+import { useLanguage } from '../context/LanguageContext';
 export const Docs = () => {
   const navigation = useNavigation<any>();
+  const { language } = useLanguage();
   const dispatch = useAppDispatch();
   const reduxDocuments = useAppSelector(
     (state) => state.inventory.documents);
@@ -37,14 +39,17 @@ export const Docs = () => {
       />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.sectionTitle}>DOCUMENTOS EN REDUX</Text>
+       <Text style={styles.sectionTitle}>{language === 'es' ? 'DOCUMENTOS EN REDUX' : 'DOCUMENTS IN REDUX'}
+       </Text>
 
 <TouchableOpacity
   style={styles.reduxButton}
   onPress={handleAddReduxDocument}
 >
   <Text style={styles.reduxButtonText}>
-    AGREGAR DOCUMENTO A REDUX
+    {language === 'es'
+    ? 'AGREGAR DOCUMENTO A REDUX'
+    : 'ADD DOCUMENT TO REDUX'}
   </Text>
 </TouchableOpacity>
 
@@ -57,16 +62,25 @@ export const Docs = () => {
     <TouchableOpacity
       onPress={() => handleRemoveReduxDocument(doc.id)}
     >
-      <Text style={styles.removeText}>Eliminar</Text>
+      <Text style={styles.removeText}>{language === 'es' ? 'Eliminar' : 'Remove'}
+    </Text>
     </TouchableOpacity>
   </View>
 ))}
-        <Text style={styles.sectionTitle}>MIS DOCUMENTOS FAVORITOS</Text>
+        <Text style={styles.sectionTitle}>
+  {language === 'es'
+    ? 'MIS DOCUMENTOS FAVORITOS'
+    : 'MY FAVORITE DOCUMENTS'}
+</Text>
 
-        {favorites.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No tienes documentos guardados en favoritos.</Text>
-          </View>
+{favorites.length === 0 ? (
+  <View style={styles.emptyContainer}>
+    <Text style={styles.emptyText}>
+      {language === 'es'
+        ? 'No tienes documentos guardados en favoritos.'
+        : 'You have no documents saved as favorites.'}
+    </Text>
+  </View>
         ) : (
           <View style={styles.grid}>
             {favorites.map((doc) => (

@@ -1,18 +1,13 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet,Text,View,FlatList,TouchableOpacity,} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-
+import { useLanguage } from '../context/LanguageContext';
 import { useNotifications } from '../context/NotificationContext';
 import { COLORS } from '../constants/theme';
 
 export const Notifications = () => {
+  const { language } = useLanguage();
   const {
     notifications,
     markAsRead,
@@ -35,14 +30,14 @@ export const Notifications = () => {
           />
 
           <Text style={styles.title}>
-            Notificaciones
+             {language === 'es' ? 'Notificaciones' : 'Notifications'}
           </Text>
         </View>
 
         {notifications.length > 0 && (
           <TouchableOpacity onPress={markAllAsRead}>
             <Text style={styles.actionText}>
-              Leer todas
+               {language === 'es' ? 'Leer todas' : 'Read all'}
             </Text>
           </TouchableOpacity>
         )}
@@ -57,11 +52,11 @@ export const Notifications = () => {
           />
 
           <Text style={styles.emptyTitle}>
-            No tienes notificaciones
+            {language === 'es'? 'No tienes notificaciones': 'You have no notifications'}
           </Text>
 
           <Text style={styles.emptyText}>
-            Aquí aparecerán las notificaciones de LegalBooks.
+             {language === 'es'? 'Aquí aparecerán las notificaciones de LegalBooks.': 'Your LegalBooks notifications will appear here.'}
           </Text>
         </View>
       ) : (
@@ -97,7 +92,7 @@ export const Notifications = () => {
                   </Text>
 
                   <Text style={styles.notificationDate}>
-                    {new Date(item.date).toLocaleString()}
+                    {new Date(item.date).toLocaleString(language === 'es' ? 'es-HN' : 'en-US')}
                   </Text>
                 </View>
 
@@ -113,7 +108,7 @@ export const Notifications = () => {
             onPress={clearNotifications}
           >
             <Text style={styles.clearButtonText}>
-              ELIMINAR NOTIFICACIONES
+             {language === 'es'? 'ELIMINAR NOTIFICACIONES': 'DELETE NOTIFICATIONS'}
             </Text>
           </TouchableOpacity>
         </>

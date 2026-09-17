@@ -2,30 +2,54 @@ import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
-
+import { useLanguage } from '../context/LanguageContext';
 interface Props {
   query: string;
   onChangeQuery: (text: string) => void;
 }
 
-export const SearchBar: React.FC<Props> = ({ query, onChangeQuery }) => (
-  <View style={{ marginBottom: 16 }}>
-    <View style={styles.searchSection}>
-      <Ionicons name="search" size={20} color={COLORS.textSecondary} style={styles.searchIcon} />
-      <TextInput
-        style={styles.input}
-        placeholder="Buscar leyes, sentencias, contratos..."
-        value={query}
-        onChangeText={onChangeQuery}
-        placeholderTextColor="#94A3B8"
-      />
+export const SearchBar: React.FC<Props> = ({ query, onChangeQuery }) => {
+  const { language } = useLanguage();
+
+  return (
+    <View style={{ marginBottom: 16 }}>
+      <View style={styles.searchSection}>
+        <Ionicons
+          name="search"
+          size={20}
+          color={COLORS.textSecondary}
+          style={styles.searchIcon}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder={
+            language === 'es'
+              ? 'Buscar leyes, sentencias, contratos...'
+              : 'Search laws, rulings, contracts...'
+          }
+          value={query}
+          onChangeText={onChangeQuery}
+          placeholderTextColor="#94A3B8"
+        />
+      </View>
+
+      <TouchableOpacity style={styles.filterButton}>
+        <Ionicons
+          name="options-outline"
+          size={18}
+          color="#FFF"
+        />
+
+        <Text style={styles.filterButtonText}>
+          {language === 'es'
+            ? 'FILTRAR BÚSQUEDA'
+            : 'FILTER SEARCH'}
+        </Text>
+      </TouchableOpacity>
     </View>
-    <TouchableOpacity style={styles.filterButton}>
-      <Ionicons name="options-outline" size={18} color="#FFF" />
-      <Text style={styles.filterButtonText}>FILTRAR BÚSQUEDA</Text>
-    </TouchableOpacity>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   searchSection: {
