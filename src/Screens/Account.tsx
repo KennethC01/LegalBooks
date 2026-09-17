@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert,} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppSelector } from '../store/hooks';
 export const Account = () => {
+  const navigation = useNavigation<any>();
   const { user, logout } = useAuth();
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState('');
@@ -103,7 +106,20 @@ export const Account = () => {
   </Text>
 </TouchableOpacity>
         </View>
+       <TouchableOpacity
+  style={styles.settingsButton}
+  onPress={() => navigation.navigate('Settings')}
+>
+  <Ionicons
+    name="settings-outline"
+    size={20}
+    color="#170072"
+  />
 
+  <Text style={styles.settingsButtonText}>
+    CONFIGURACIÓN
+  </Text>
+</TouchableOpacity>
         {/* Botón para borrar AsyncStorage y regresar al Login */}
         <TouchableOpacity style={styles.logoutButton} onPress={logout}>
           <Text style={styles.logoutButtonText}>CERRAR SESIÓN</Text>
@@ -181,6 +197,24 @@ saveButton: {
 
 saveButtonText: {
   color: '#121212',
+  fontWeight: 'bold',
+  fontSize: 14,
+},
+settingsButton: {
+  backgroundColor: COLORS.surface,
+  height: 48,
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: COLORS.border,
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'row',
+  gap: 8,
+  marginBottom: 12,
+},
+
+settingsButtonText: {
+  color: '#170072',
   fontWeight: 'bold',
   fontSize: 14,
 },
