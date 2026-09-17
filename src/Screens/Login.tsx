@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { COLORS } from '../constants/theme';
 import { useAppDispatch } from '../store/hooks';
 import { setUser } from '../store/slices/userslice';
+import { useLanguage } from '../context/LanguageContext';
 const GOLD_COLORS = {
   primary: '#D4AF37',
   dark: '#B8860B',
@@ -17,27 +18,22 @@ export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
+  const { language } = useLanguage();
   const dispatch = useAppDispatch();
   
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
-      Alert.alert('Campos requeridos', 'Por favor ingresa tu correo y contraseña.');
-      return;
+      Alert.alert(language === 'es' ? 'Campos requeridos' : 'Required fields',language === 'es'? 'Por favor ingresa tu correo y contraseña.': 'Please enter your email and password.');     
+     return;
     }
    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailRegex.test(email.trim())) {
-    Alert.alert(
-      'Correo inválido',
-      'Por favor ingresa un correo electrónico válido.'
-    );
+    Alert.alert(language === 'es' ? 'Correo inválido' : 'Invalid email',language === 'es'? 'Por favor ingresa un correo electrónico válido.': 'Please enter a valid email address.');
     return;
   }
   if (password.length < 6) {
-    Alert.alert(
-      'Contraseña inválida',
-      'La contraseña debe tener al menos 6 caracteres.'
-    );
+    Alert.alert(language === 'es' ? 'Contraseña inválida' : 'Invalid password',language === 'es'? 'La contraseña debe tener al menos 6 caracteres.': 'The password must be at least 6 characters long.');
     return;
   }
    const cleanEmail = email.trim();
@@ -80,14 +76,18 @@ console.log('Usuario almacenado en Redux:', {
                resizeMode="contain"
 />
         <Text style={styles.brandTitle}>LEGAL BOOKS</Text>
-        <Text style={styles.subtitle}>Ingresa a tu cuenta para continuar</Text>
-
+<Text style={styles.subtitle}>
+  {language === 'es'
+    ? 'Ingresa a tu cuenta para continuar'
+    : 'Sign in to your account to continue'}
+</Text>
         <View style={styles.form}>
-          <Text style={styles.label}>Correo Electrónico</Text>
+<Text style={styles.label}>
+  {language === 'es' ? 'Correo Electrónico' : 'Email'}
+</Text>
           <TextInput
             style={styles.input}
-            placeholder="ejemplo@correo.com"
-            placeholderTextColor={GOLD_COLORS.subtext}
+placeholder={language === 'es'? 'ejemplo@correo.com': 'example@email.com'}            placeholderTextColor={GOLD_COLORS.subtext}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -95,8 +95,9 @@ console.log('Usuario almacenado en Redux:', {
             autoCorrect={false}
           />
 
-          <Text style={styles.label}>Contraseña</Text>
-          <TextInput
+            <Text style={styles.label}>{language === 'es' ? 'Contraseña' : 'Password'}
+          </Text>   
+         <TextInput
             style={styles.input}
             placeholder="••••••••"
             placeholderTextColor={GOLD_COLORS.subtext}
@@ -109,7 +110,8 @@ console.log('Usuario almacenado en Redux:', {
           />
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>INICIAR SESIÓN</Text>
+              <Text style={styles.loginButtonText}>{language === 'es' ? 'INICIAR SESIÓN' : 'SIGN IN'}
+                </Text>
           </TouchableOpacity>
         </View>
       </View>
