@@ -3,11 +3,13 @@ import {StyleSheet,Text,View,FlatList,TouchableOpacity,} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 import { useNotifications } from '../context/NotificationContext';
 import { COLORS } from '../constants/theme';
 
 export const Notifications = () => {
   const { language } = useLanguage();
+  const { colors } = useTheme();
   const {
     notifications,
     markAsRead,
@@ -20,16 +22,29 @@ export const Notifications = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <SafeAreaView
+  style={[
+    styles.container,
+    { backgroundColor: colors.background },
+  ]}
+>
+      <View
+  style={[
+    styles.header,
+    {
+      backgroundColor: colors.surface,
+      borderBottomColor: colors.border,
+    },
+  ]}
+>
         <View style={styles.titleContainer}>
           <Ionicons
             name="notifications"
             size={24}
-            color={COLORS.primary}
+            color={colors.primary}
           />
 
-          <Text style={styles.title}>
+        <Text style={[styles.title,{ color: colors.textPrimary },]}>
              {language === 'es' ? 'Notificaciones' : 'Notifications'}
           </Text>
         </View>
@@ -48,14 +63,14 @@ export const Notifications = () => {
           <Ionicons
             name="notifications-off-outline"
             size={60}
-            color={COLORS.textSecondary}
+            color={colors.textSecondary}
           />
 
-          <Text style={styles.emptyTitle}>
+         <Text style={[styles.emptyTitle,{ color: colors.textPrimary },]}>
             {language === 'es'? 'No tienes notificaciones': 'You have no notifications'}
           </Text>
 
-          <Text style={styles.emptyText}>
+          <Text style={[styles.emptyText,{ color: colors.textSecondary },]}>
              {language === 'es'? 'Aquí aparecerán las notificaciones de LegalBooks.': 'Your LegalBooks notifications will appear here.'}
           </Text>
         </View>
@@ -69,29 +84,33 @@ export const Notifications = () => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={[
-                  styles.notificationCard,
+               styles.notificationCard,
+                 {
+                  backgroundColor: colors.surface,
+                  borderColor: colors.border,
+                   },
                   !item.read && styles.unreadCard,
-                ]}
+              ]}
                 onPress={() => handleNotificationPress(item.id)}
               >
                 <View style={styles.iconContainer}>
                   <Ionicons
                     name="notifications"
                     size={22}
-                    color={COLORS.primary}
+                    color={colors.primary}
                   />
                 </View>
 
                 <View style={styles.notificationContent}>
-                  <Text style={styles.notificationTitle}>
+                  <Text style={[ styles.notificationTitle,{ color: colors.textPrimary },]}>
                     {item.title}
                   </Text>
 
-                  <Text style={styles.notificationMessage}>
+                  <Text style={[ styles.notificationMessage,{ color: colors.textSecondary }, ]}>
                     {item.message}
                   </Text>
 
-                  <Text style={styles.notificationDate}>
+                  <Text style={[ styles.notificationDate,{ color: colors.textSecondary },]}>
                     {new Date(item.date).toLocaleString(language === 'es' ? 'es-HN' : 'en-US')}
                   </Text>
                 </View>

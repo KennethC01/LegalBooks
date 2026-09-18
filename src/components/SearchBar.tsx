@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-nativ
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 interface Props {
   query: string;
   onChangeQuery: (text: string) => void;
@@ -10,28 +11,37 @@ interface Props {
 
 export const SearchBar: React.FC<Props> = ({ query, onChangeQuery }) => {
   const { language } = useLanguage();
-
+  const { colors } = useTheme();
   return (
     <View style={{ marginBottom: 16 }}>
-      <View style={styles.searchSection}>
+      <View style={[ styles.searchSection,
+    {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+    },
+  ]}
+>
         <Ionicons
           name="search"
           size={20}
-          color={COLORS.textSecondary}
+          color={colors.textSecondary}
           style={styles.searchIcon}
         />
 
         <TextInput
-          style={styles.input}
-          placeholder={
-            language === 'es'
-              ? 'Buscar leyes, sentencias, contratos...'
-              : 'Search laws, rulings, contracts...'
-          }
-          value={query}
-          onChangeText={onChangeQuery}
-          placeholderTextColor="#94A3B8"
-        />
+  style={[
+    styles.input,
+    { color: colors.textPrimary },
+  ]}
+  placeholder={
+    language === 'es'
+      ? 'Buscar leyes, sentencias, contratos...'
+      : 'Search laws, rulings, contracts...'
+  }
+  value={query}
+  onChangeText={onChangeQuery}
+  placeholderTextColor={colors.textSecondary}
+/>
       </View>
 
       <TouchableOpacity style={styles.filterButton}>

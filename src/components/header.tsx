@@ -2,42 +2,60 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
-
+import { useTheme } from '../context/ThemeContext';
 interface HeaderProps {
   onNotificationPress?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  onNotificationPress,}) => (
-  <View style={styles.header}>
-    <Ionicons
-      name="menu-outline"
-      size={28}
-      color={COLORS.textPrimary}
-    />
-    <View style={styles.logoContainer}>
-      <FontAwesome5
-        name="balance-scale"
-        size={20}
-        color={COLORS.accent}
-      />
-      <Text style={styles.logoText}>
-        LEGALBOOKS
-      </Text>
-    </View>
-    <TouchableOpacity
-      onPress={onNotificationPress}
-      activeOpacity={0.7}
-      style={styles.notificationButton}
+  onNotificationPress,
+}) => {
+  const { colors } = useTheme();
+
+  return (
+    <View
+      style={[
+        styles.header,
+        { backgroundColor: colors.surface },
+      ]}
     >
       <Ionicons
-        name="notifications-outline"
-        size={24}
-        color={COLORS.textPrimary}
+        name="menu-outline"
+        size={28}
+        color={colors.textPrimary}
       />
-    </TouchableOpacity>
-  </View>
-);
+
+      <View style={styles.logoContainer}>
+        <FontAwesome5
+          name="balance-scale"
+          size={20}
+          color={COLORS.accent}
+        />
+
+        <Text
+          style={[
+            styles.logoText,
+            { color: colors.textPrimary },
+          ]}
+        >
+          LEGALBOOKS
+        </Text>
+      </View>
+
+      <TouchableOpacity
+        onPress={onNotificationPress}
+        activeOpacity={0.7}
+        style={styles.notificationButton}
+      >
+        <Ionicons
+          name="notifications-outline"
+          size={24}
+          color={colors.textPrimary}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   header: {

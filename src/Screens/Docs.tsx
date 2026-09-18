@@ -13,9 +13,11 @@ import { useLanguage } from '../context/LanguageContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../context/AuthContext';
 import { setFavorites } from '../store/slices/favoritesSlice';
+import { useTheme } from '../context/ThemeContext';
 export const Docs = () => {
   const navigation = useNavigation<any>();
   const { language } = useLanguage();
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
   const { user } = useAuth();
   const reduxDocuments = useAppSelector(
@@ -66,8 +68,8 @@ const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
   const handleRemoveReduxDocument = (id: string) => {dispatch(removeDocument(id));
   };
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      {/* Cabecera con logo */}
+      <SafeAreaView style={[styles.container,{ backgroundColor: colors.background },]}edges={['top', 'left', 'right']}>
+    {/* Cabecera con logo */}
       <Header 
        onNotificationPress={() => navigation.navigate('Notifications')}
       />
@@ -80,18 +82,29 @@ const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
   style={styles.reduxButton}
   onPress={handleAddReduxDocument}
 >
-  <Text style={styles.reduxButtonText}>
-    {language === 'es'
-    ? 'AGREGAR DOCUMENTO A REDUX'
-    : 'ADD DOCUMENT TO REDUX'}
-  </Text>
+  <Text style={[styles.sectionTitle, { color: colors.primary }]}>
+  {language === 'es'
+    ? 'DOCUMENTOS EN REDUX'
+    : 'DOCUMENTS IN REDUX'}
+</Text>
 </TouchableOpacity>
 
 {reduxDocuments.map((doc) => (
-  <View key={doc.id} style={styles.reduxDocument}>
-    <Text style={styles.reduxDocumentText}>
-      {doc.name}
-    </Text>
+  <View key={doc.id}style={[styles.reduxDocument,
+   {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+    },
+  ]}
+>
+    <Text
+  style={[
+    styles.reduxDocumentText,
+    { color: colors.textPrimary },
+  ]}
+>
+  {doc.name}
+</Text>
 
     <TouchableOpacity
       onPress={() => handleRemoveReduxDocument(doc.id)}
@@ -101,7 +114,7 @@ const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
     </TouchableOpacity>
   </View>
 ))}
-        <Text style={styles.sectionTitle}>
+        <Text style={[styles.sectionTitle, { color: colors.primary }]}>
   {language === 'es'
     ? 'MIS DOCUMENTOS FAVORITOS'
     : 'MY FAVORITE DOCUMENTS'}
@@ -109,7 +122,7 @@ const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
 
 {favorites.length === 0 ? (
   <View style={styles.emptyContainer}>
-    <Text style={styles.emptyText}>
+    <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
       {language === 'es'
         ? 'No tienes documentos guardados en favoritos.'
         : 'You have no documents saved as favorites.'}
