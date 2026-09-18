@@ -5,12 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { COLORS } from '../constants/theme';
 import { useLanguage } from '../context/LanguageContext';
-
+import { useTheme } from '../context/ThemeContext';
 export default function Settings() {
   const { language, setLanguage, t } = useLanguage();
-
+  const { theme, toggleTheme, colors } = useTheme();
   return (
-    <SafeAreaView style={styles.container}>
+   <SafeAreaView style={[styles.container,{ backgroundColor: colors.background },]}>
       <View style={styles.content}>
         <View style={styles.header}>
           <Ionicons
@@ -19,37 +19,40 @@ export default function Settings() {
             color={COLORS.primary}
           />
 
-          <Text style={styles.title}>
-            {t('settings')}
+         <Text style={[styles.title,{ color: colors.textPrimary },]}>{t('settings')}
           </Text>
         </View>
 
-        <Text style={styles.sectionTitle}>
-          {t('language')}
+        <Text style={[styles.sectionTitle,{ color: colors.primary },]}>
+         {t('language')}
         </Text>
 
         <TouchableOpacity
           style={[
             styles.option,
+            {
+          backgroundColor: colors.surface,
+          borderColor: colors.border,
+            },
             language === 'es' && styles.selectedOption,
           ]}
           onPress={() => setLanguage('es')}
         >
           <View>
-            <Text style={styles.optionTitle}>
-              🇭🇳 {t('spanish')}
-            </Text>
+            <Text style={[styles.optionTitle, { color: colors.textPrimary }]}>
+            🇭🇳 {t('spanish')}
+           </Text>
 
-            <Text style={styles.optionDescription}>
-              Usar LegalBooks en español
-            </Text>
+          <Text style={[styles.optionDescription, { color: colors.textSecondary }]}>
+          Usar LegalBooks en español
+           </Text>
           </View>
 
           {language === 'es' && (
             <Ionicons
               name="checkmark-circle"
               size={24}
-              color={COLORS.primary}
+              color={colors.primary}
             />
           )}
         </TouchableOpacity>
@@ -57,16 +60,20 @@ export default function Settings() {
         <TouchableOpacity
           style={[
             styles.option,
+            {
+               backgroundColor: colors.surface,
+              borderColor: colors.border,
+                },
             language === 'en' && styles.selectedOption,
           ]}
           onPress={() => setLanguage('en')}
         >
           <View>
-            <Text style={styles.optionTitle}>
-              🇺🇸 {t('english')}
-            </Text>
+            <Text style={[styles.optionTitle, { color: colors.textPrimary }]}>
+            🇺🇸 {t('english')}
+           </Text>
 
-            <Text style={styles.optionDescription}>
+            <Text style={[styles.optionDescription, { color: colors.textSecondary }]}>
               Use LegalBooks in English
             </Text>
           </View>
@@ -75,7 +82,7 @@ export default function Settings() {
             <Ionicons
               name="checkmark-circle"
               size={24}
-              color={COLORS.primary}
+              color={colors.primary}
             />
           )}
         </TouchableOpacity>
@@ -84,41 +91,77 @@ export default function Settings() {
           {t('appearance')}
         </Text>
 
-        <View style={styles.disabledOption}>
-          <View style={styles.appearanceRow}>
-            <Ionicons
-              name="sunny-outline"
-              size={22}
-              color={COLORS.primary}
-            />
+        <TouchableOpacity
+  style={[
+    styles.option,
+     {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+    },
+    theme === 'light' && styles.selectedOption,
+  ]}
+  onPress={() => {
+    if (theme !== 'light') {
+      toggleTheme();
+    }
+  }}
+>
+  <View style={styles.appearanceRow}>
+    <Ionicons
+      name="sunny-outline"
+      size={22}
+      color={colors.primary}
+    />
 
-            <Text style={styles.optionTitle}>
-              {t('lightMode')}
-            </Text>
-          </View>
+    <Text style={[styles.optionTitle, { color: colors.textPrimary }]}>
+      {t('lightMode')}
+    </Text>
+  </View>
 
-          <Text style={styles.pendingText}>
-            Próximamente
-          </Text>
-        </View>
+  {theme === 'light' && (
+    <Ionicons
+      name="checkmark-circle"
+      size={24}
+      color={colors.primary}
+    />
+  )}
+</TouchableOpacity>
 
-        <View style={styles.disabledOption}>
-          <View style={styles.appearanceRow}>
-            <Ionicons
-              name="moon-outline"
-              size={22}
-              color={COLORS.primary}
-            />
+<TouchableOpacity
+  style={[
+    styles.option,
+    {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+    },
+    theme === 'dark' && styles.selectedOption,
+  ]}
+  onPress={() => {
+    if (theme !== 'dark') {
+      toggleTheme();
+    }
+  }}
+>
+  <View style={styles.appearanceRow}>
+    <Ionicons
+      name="moon-outline"
+      size={22}
+      color={colors.primary}
+    />
 
-            <Text style={styles.optionTitle}>
-              {t('darkMode')}
-            </Text>
-          </View>
+    <Text style={[styles.optionTitle, { color: colors.textPrimary }]}>
+      {t('darkMode')}
+    </Text>
+  </View>
 
-          <Text style={styles.pendingText}>
-            Próximamente
-          </Text>
-        </View>
+  {theme === 'dark' && (
+    <Ionicons
+      name="checkmark-circle"
+      size={24}
+      color={colors.primary}
+    />
+  )}
+</TouchableOpacity>
       </View>
     </SafeAreaView>
   );
