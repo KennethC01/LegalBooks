@@ -28,7 +28,9 @@
     },
     "plugins": [
       "expo-web-browser",
-      "expo-asset"
+      "expo-asset",
+      "expo-sharing",
+      "expo-status-bar"
     ]
   }
 }
