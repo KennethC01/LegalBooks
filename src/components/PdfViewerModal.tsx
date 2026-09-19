@@ -19,6 +19,7 @@ import { WebView } from 'react-native-webview';
 import { DocumentItem } from '../constants/types';
 import { COLORS } from '../constants/theme';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 interface Props {
   visible: boolean;
   document: DocumentItem | null;
@@ -27,6 +28,7 @@ interface Props {
 
 export const PdfViewerModal: React.FC<Props> = ({ visible, document, onClose }) => {
   const { language } = useLanguage();
+  const { colors } = useTheme();
   const [base64Pdf, setBase64Pdf] = useState<string | null>(null);
   const [localUri, setLocalUri] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -281,10 +283,28 @@ export const PdfViewerModal: React.FC<Props> = ({ visible, document, onClose }) 
 
         <View style={styles.viewerContainer}>
           {loading || !base64Pdf ? (
-            <View style={styles.loaderContainer}>
-              <ActivityIndicator size="large" color={COLORS.primary} />
-              <Text style={styles.loadingText}>Cargando documento...</Text>
-            </View>
+           <View
+  style={[
+    styles.loaderContainer,
+    { backgroundColor: colors.background },
+  ]}
+>
+  <ActivityIndicator
+    size="large"
+    color={colors.primary}
+  />
+
+  <Text
+    style={[
+      styles.loadingText,
+      { color: colors.textSecondary },
+    ]}
+  >
+    {language === 'es'
+      ? 'Cargando documento...'
+      : 'Loading document...'}
+  </Text>
+</View>
           ) : (
             <WebView
               originWhitelist={['*']}

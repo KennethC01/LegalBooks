@@ -13,9 +13,11 @@ import { useLanguage } from '../context/LanguageContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../context/AuthContext';
 import { setFavorites } from '../store/slices/favoritesSlice';
+import { useTheme } from '../context/ThemeContext';
 export const Docs = () => {
   const navigation = useNavigation<any>();
   const { language } = useLanguage();
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
   const { user } = useAuth();
   const reduxDocuments = useAppSelector(
@@ -61,47 +63,23 @@ const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
   const handleSelectDocument = (doc: DocumentItem) => {setSelectedDoc(doc);setModalVisible(true);
   };
 
-  const handleAddReduxDocument = () => {dispatch(addDocument({id: Date.now().toString(),name: 'Constitucion de Honduras',}));
+  /*const handleAddReduxDocument = () => {dispatch(addDocument({id: Date.now().toString(),name: 'Constitucion de Honduras',}));
   };
   const handleRemoveReduxDocument = (id: string) => {dispatch(removeDocument(id));
-  };
+  };*/
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      {/* Cabecera con logo */}
+      <SafeAreaView style={[styles.container,{ backgroundColor: colors.background },]}edges={['top', 'left', 'right']}>
+    {/* Cabecera con logo */}
       <Header 
        onNotificationPress={() => navigation.navigate('Notifications')}
       />
-
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-       <Text style={styles.sectionTitle}>{language === 'es' ? 'DOCUMENTOS EN REDUX' : 'DOCUMENTS IN REDUX'}
-       </Text>
-
-<TouchableOpacity
-  style={styles.reduxButton}
-  onPress={handleAddReduxDocument}
+       <ScrollView
+  contentContainerStyle={styles.scrollContent}
+  showsVerticalScrollIndicator={false}
 >
-  <Text style={styles.reduxButtonText}>
-    {language === 'es'
-    ? 'AGREGAR DOCUMENTO A REDUX'
-    : 'ADD DOCUMENT TO REDUX'}
-  </Text>
-</TouchableOpacity>
+       
 
-{reduxDocuments.map((doc) => (
-  <View key={doc.id} style={styles.reduxDocument}>
-    <Text style={styles.reduxDocumentText}>
-      {doc.name}
-    </Text>
-
-    <TouchableOpacity
-      onPress={() => handleRemoveReduxDocument(doc.id)}
-    >
-      <Text style={styles.removeText}>{language === 'es' ? 'Eliminar' : 'Remove'}
-    </Text>
-    </TouchableOpacity>
-  </View>
-))}
-        <Text style={styles.sectionTitle}>
+        <Text style={[styles.sectionTitle, { color: colors.primary }]}>
   {language === 'es'
     ? 'MIS DOCUMENTOS FAVORITOS'
     : 'MY FAVORITE DOCUMENTS'}
@@ -109,7 +87,7 @@ const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
 
 {favorites.length === 0 ? (
   <View style={styles.emptyContainer}>
-    <Text style={styles.emptyText}>
+    <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
       {language === 'es'
         ? 'No tienes documentos guardados en favoritos.'
         : 'You have no documents saved as favorites.'}

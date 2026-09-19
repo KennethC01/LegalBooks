@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { toggleFavorite } from '../store/slices/favoritesSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 interface Props {
   item: DocumentItem;
   onSelect: (item: DocumentItem) => void;
@@ -16,6 +17,7 @@ export const DocumentCard: React.FC<Props> = ({ item, onSelect }) => {
   // Conexión con el contexto de favoritos
   const dispatch = useAppDispatch();
   const { user } = useAuth();
+  const { colors } = useTheme();
   const favorites = useAppSelector(state => state.favorites.documents);
   const favorite = favorites.some(document => document.id === item.id);
   const handleToggleFavorite = async () => {
@@ -46,7 +48,17 @@ export const DocumentCard: React.FC<Props> = ({ item, onSelect }) => {
   }
 };
   return (
-    <TouchableOpacity style={styles.card} onPress={() => onSelect(item)} activeOpacity={0.7}>
+    <TouchableOpacity
+  style={[
+    styles.card,
+    {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+    },
+  ]}
+  onPress={() => onSelect(item)}
+  activeOpacity={0.7}
+>
       <View style={styles.cardHeader}>
         {/* Agrupamos el icono y la etiqueta a la izquierda */}
         <View style={styles.leftHeader}>
@@ -66,13 +78,18 @@ export const DocumentCard: React.FC<Props> = ({ item, onSelect }) => {
           <Ionicons
             name={favorite ? 'star' : 'star-outline'}
             size={20}
-            color={favorite ? '#270767' : COLORS.textSecondary}
+            color={favorite ? '#270767' : colors.textSecondary}
           />
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
-      <Text style={styles.cardSubtitle} numberOfLines={2}>{item.subtitle}</Text>
+      <Text
+  style={[styles.cardTitle, { color: colors.textPrimary }]}numberOfLines={2}>{item.title}
+</Text>
+
+<Text
+  style={[styles.cardSubtitle, { color: colors.textSecondary }]}numberOfLines={2}>{item.subtitle}
+</Text>
     </TouchableOpacity>
   );
 };

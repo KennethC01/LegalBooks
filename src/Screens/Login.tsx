@@ -6,6 +6,7 @@ import { COLORS } from '../constants/theme';
 import { useAppDispatch } from '../store/hooks';
 import { setUser } from '../store/slices/userslice';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 const GOLD_COLORS = {
   primary: '#D4AF37',
   dark: '#B8860B',
@@ -19,6 +20,7 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const { language } = useLanguage();
+  const { isDark, colors } = useTheme();
   const dispatch = useAppDispatch();
   
   const handleLogin = async () => {
@@ -66,9 +68,8 @@ console.log('Usuario almacenado en Redux:', {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-  
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+     <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background}/>  
       <View style={styles.content}>
             <Image
              source={require('../../assets/LegalBooks.png')}
@@ -76,18 +77,26 @@ console.log('Usuario almacenado en Redux:', {
                resizeMode="contain"
 />
         <Text style={styles.brandTitle}>LEGAL BOOKS</Text>
-<Text style={styles.subtitle}>
+<Text style={[ styles.subtitle, { color: colors.textSecondary }, ]}>
   {language === 'es'
     ? 'Ingresa a tu cuenta para continuar'
     : 'Sign in to your account to continue'}
 </Text>
         <View style={styles.form}>
-<Text style={styles.label}>
+<Text style={[styles.label, { color: colors.primary },]}>
   {language === 'es' ? 'Correo Electrónico' : 'Email'}
 </Text>
           <TextInput
-            style={styles.input}
-placeholder={language === 'es'? 'ejemplo@correo.com': 'example@email.com'}            placeholderTextColor={GOLD_COLORS.subtext}
+            style={[
+  styles.input,
+  {
+    backgroundColor: colors.surface,
+    borderColor: colors.primary,
+    color: colors.textPrimary,
+  },
+]}
+placeholder={language === 'es'? 'ejemplo@correo.com': 'example@email.com'}            
+placeholderTextColor={colors.textSecondary}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -95,12 +104,19 @@ placeholder={language === 'es'? 'ejemplo@correo.com': 'example@email.com'}      
             autoCorrect={false}
           />
 
-            <Text style={styles.label}>{language === 'es' ? 'Contraseña' : 'Password'}
+            <Text style={[styles.label,{ color: colors.primary },]}>{language === 'es' ? 'Contraseña' : 'Password'}
           </Text>   
          <TextInput
-            style={styles.input}
+            style={[
+  styles.input,
+  {
+    backgroundColor: colors.surface,
+    borderColor: colors.primary,
+    color: colors.textPrimary,
+  },
+]}
             placeholder="••••••••"
-            placeholderTextColor={GOLD_COLORS.subtext}
+            placeholderTextColor={colors.textSecondary}
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}

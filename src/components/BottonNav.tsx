@@ -10,23 +10,24 @@ import { Account } from '../Screens/Account';
 import { Notifications } from '../Screens/Notifications';
 import { useLanguage } from '../context/LanguageContext';
 import { COLORS } from '../constants/theme';
-
+import { useTheme } from '../context/ThemeContext';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const MainTabs = () => {
   const { language } = useLanguage();
+  const { colors } = useTheme();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
 
-        tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.textSecondary,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
 
         tabBarStyle: {
-          backgroundColor: COLORS.surface,
-          borderTopColor: COLORS.border,
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
           borderTopWidth: 1,
 
           height: Platform.OS === 'ios' ? 140 : 120,

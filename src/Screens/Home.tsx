@@ -10,9 +10,11 @@ import { COLORS } from '../constants/theme';
 import { DocumentItem } from '../constants/types';
 import { useNavigation } from '@react-navigation/native';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 export const Home = () => {
   const navigation = useNavigation<any>();
   const { language } = useLanguage();
+  const { isDark, colors } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDoc, setSelectedDoc] = useState<DocumentItem | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -28,8 +30,8 @@ export const Home = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.headerBg} translucent={false} />
+    <SafeAreaView style={[ styles.container,{ backgroundColor: colors.background },]}edges={['top', 'left', 'right']}>
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'}backgroundColor={colors.background}translucent={false}/>
       <Header 
        onNotificationPress={() => navigation.navigate('Notifications')}
       />
@@ -37,14 +39,14 @@ export const Home = () => {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <SearchBar query={searchQuery} onChangeQuery={setSearchQuery} />
 
-        <Text style={styles.sectionTitle}>
+        <Text style={[styles.sectionTitle, { color: colors.primary }]}>
        {language === 'es'
         ? `DOCUMENTOS DESTACADOS (${filteredDocuments.length})`
        : `FEATURED DOCUMENTS (${filteredDocuments.length})`}
        </Text>
         
         {filteredDocuments.length === 0 ? (
-          <Text style={styles.emptyText}>
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
           {language === 'es'
            ? 'No se encontraron documentos.'
             : 'No documents found.'}

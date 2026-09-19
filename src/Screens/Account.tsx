@@ -8,10 +8,12 @@ import { COLORS } from '../constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppSelector } from '../store/hooks';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 export const Account = () => {
   const navigation = useNavigation<any>();
   const { user, logout } = useAuth();
   const { language } = useLanguage();
+  const { colors } = useTheme();
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState('');
   const reduxUser = useAppSelector((state) => state.user);
@@ -79,37 +81,83 @@ export const Account = () => {
 };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+  style={[
+    styles.container,
+    { backgroundColor: colors.background },
+  ]}
+>
       <View style={styles.content}>
-        <Text style={styles.title}>
-         {language === 'es' ? 'Mi Cuenta' : 'My Account'}
-           </Text>
+        <Text
+  style={[
+    styles.title,
+    { color: colors.primary },
+  ]}
+>
+  {language === 'es' ? 'Mi Cuenta' : 'My Account'}
+</Text>
         
-        <View style={styles.card}>
-          <Text style={styles.label}>
+       <View
+  style={[
+    styles.card,
+    {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+    },
+  ]}
+>
+          <Text style={[
+  styles.label,
+  { color: colors.textSecondary },
+]}>
            {language === 'es' ? 'Nombre' : 'Name'}
             </Text>
           <TextInput
-  style={styles.input}
+  style={[
+  styles.input,
+  {
+    backgroundColor: colors.background,
+    borderColor: colors.border,
+    color: colors.textPrimary,
+  },
+]}
   placeholder={
   language === 'es'? 'Ingresa tu nombre': 'Enter your name'}
-  placeholderTextColor={COLORS.textSecondary}
+  placeholderTextColor={colors.textSecondary}
   value={name}
   onChangeText={setName}
   autoCorrect={false}
 />
-<Text style={styles.label}>
+<Text style={[
+  styles.label,
+  { color: colors.textSecondary },
+]}>
   {language === 'es' ? 'Correo electrónico' : 'Email'}
 </Text>
-<Text style={styles.value}>
+<Text style={[ styles.value,
+  { color: colors.textPrimary },
+]}>
   {reduxUser.email || user?.email || 'No disponible'}
 </Text>
-          <Text style={styles.label}>{language === 'es' ? 'Número de teléfono' : 'Phone number'}
+         <Text
+  style={[
+    styles.label,
+    { color: colors.textSecondary },
+  ]}
+>
+  {language === 'es' ? 'Número de teléfono' : 'Phone number'}
 </Text>
           <TextInput
-  style={styles.input}
+ style={[
+  styles.input,
+  {
+    backgroundColor: colors.background,
+    borderColor: colors.border,
+    color: colors.textPrimary,
+  },
+]}
   placeholder="Ej. 98765432"
-  placeholderTextColor={COLORS.textSecondary}
+  placeholderTextColor={colors.textSecondary}
   value={phone}
   onChangeText={setPhone}
   keyboardType="phone-pad"
@@ -125,16 +173,27 @@ export const Account = () => {
 </TouchableOpacity>
         </View>
        <TouchableOpacity
-  style={styles.settingsButton}
+  style={[
+    styles.settingsButton,
+    {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+    },
+  ]}
   onPress={() => navigation.navigate('Settings')}
 >
   <Ionicons
     name="settings-outline"
     size={20}
-    color="#170072"
+    color={colors.primary}
   />
 
-  <Text style={styles.settingsButtonText}>
+  <Text
+  style={[
+    styles.settingsButtonText,
+    { color: colors.primary },
+  ]}
+>
     {language === 'es' ? 'CONFIGURACIÓN' : 'SETTINGS'}
   </Text>
 </TouchableOpacity>
