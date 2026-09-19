@@ -63,57 +63,22 @@ const [selectedDoc, setSelectedDoc] =useState<DocumentItem | null>(null);
   const handleSelectDocument = (doc: DocumentItem) => {setSelectedDoc(doc);setModalVisible(true);
   };
 
-  const handleAddReduxDocument = () => {dispatch(addDocument({id: Date.now().toString(),name: 'Constitucion de Honduras',}));
+  /*const handleAddReduxDocument = () => {dispatch(addDocument({id: Date.now().toString(),name: 'Constitucion de Honduras',}));
   };
   const handleRemoveReduxDocument = (id: string) => {dispatch(removeDocument(id));
-  };
+  };*/
   return (
       <SafeAreaView style={[styles.container,{ backgroundColor: colors.background },]}edges={['top', 'left', 'right']}>
     {/* Cabecera con logo */}
       <Header 
        onNotificationPress={() => navigation.navigate('Notifications')}
       />
-
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-       <Text style={styles.sectionTitle}>{language === 'es' ? 'DOCUMENTOS EN REDUX' : 'DOCUMENTS IN REDUX'}
-       </Text>
-
-<TouchableOpacity
-  style={styles.reduxButton}
-  onPress={handleAddReduxDocument}
+       <ScrollView
+  contentContainerStyle={styles.scrollContent}
+  showsVerticalScrollIndicator={false}
 >
-  <Text style={[styles.sectionTitle, { color: colors.primary }]}>
-  {language === 'es'
-    ? 'DOCUMENTOS EN REDUX'
-    : 'DOCUMENTS IN REDUX'}
-</Text>
-</TouchableOpacity>
+       
 
-{reduxDocuments.map((doc) => (
-  <View key={doc.id}style={[styles.reduxDocument,
-   {
-      backgroundColor: colors.surface,
-      borderColor: colors.border,
-    },
-  ]}
->
-    <Text
-  style={[
-    styles.reduxDocumentText,
-    { color: colors.textPrimary },
-  ]}
->
-  {doc.name}
-</Text>
-
-    <TouchableOpacity
-      onPress={() => handleRemoveReduxDocument(doc.id)}
-    >
-      <Text style={styles.removeText}>{language === 'es' ? 'Eliminar' : 'Remove'}
-    </Text>
-    </TouchableOpacity>
-  </View>
-))}
         <Text style={[styles.sectionTitle, { color: colors.primary }]}>
   {language === 'es'
     ? 'MIS DOCUMENTOS FAVORITOS'
